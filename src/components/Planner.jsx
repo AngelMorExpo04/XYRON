@@ -142,7 +142,8 @@ export default function Planner() {
                       {isToday && (
                         <button 
                           onClick={toggleTodayDone}
-                          className={`ml-2 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shrink-0 ${isDoneToday ? 'bg-[#bdfc32] text-black' : 'bg-white/10 text-white'}`}
+                          className={`ml-2 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shrink-0 ${isDoneToday ? 'text-black' : 'bg-white/10 text-white'}`}
+                          style={isDoneToday ? { backgroundColor: neonColor, boxShadow: `0 0 15px ${neonColor}80` } : {}}
                         >
                           <Check size={20} strokeWidth={isDoneToday ? 3 : 2} />
                         </button>
