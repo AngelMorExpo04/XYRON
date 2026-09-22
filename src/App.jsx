@@ -20,22 +20,43 @@ function App() {
       
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto pt-6 px-4 -mb-6 pb-16 max-w-2xl mx-auto w-full no-scrollbar">
-        <div className="grid items-start w-full min-h-full">
-          <AnimatePresence>
+        <div className="flex flex-col w-full h-full">
+          <AnimatePresence mode="wait">
             {activeTab === 'planner' && (
-              <div key="planner" className="col-start-1 row-start-1 w-full">
+              <motion.div 
+                key="planner" 
+                initial={{ opacity: 0, filter: 'blur(10px)' }} 
+                animate={{ opacity: 1, filter: 'blur(0px)' }} 
+                exit={{ opacity: 0, filter: 'blur(10px)' }} 
+                transition={{ duration: 0.25 }} 
+                className="w-full flex-1"
+              >
                 <Planner />
-              </div>
+              </motion.div>
             )}
             {activeTab === 'tabata' && (
-              <div key="tabata" className="col-start-1 row-start-1 w-full">
+              <motion.div 
+                key="tabata" 
+                initial={{ opacity: 0, filter: 'blur(10px)' }} 
+                animate={{ opacity: 1, filter: 'blur(0px)' }} 
+                exit={{ opacity: 0, filter: 'blur(10px)' }} 
+                transition={{ duration: 0.25 }} 
+                className="w-full flex-1"
+              >
                 <TabataTimer />
-              </div>
+              </motion.div>
             )}
             {activeTab === 'strength' && (
-              <div key="strength" className="col-start-1 row-start-1 w-full">
+              <motion.div 
+                key="strength" 
+                initial={{ opacity: 0, filter: 'blur(10px)' }} 
+                animate={{ opacity: 1, filter: 'blur(0px)' }} 
+                exit={{ opacity: 0, filter: 'blur(10px)' }} 
+                transition={{ duration: 0.25 }} 
+                className="w-full flex-1"
+              >
                 <StrengthTimer />
-              </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
