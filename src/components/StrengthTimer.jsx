@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Timer, X, Play } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useWakeLock from '../hooks/useWakeLock';
 
@@ -87,6 +87,13 @@ export default function StrengthTimer() {
     setIsActive(true);
   };
 
+  const addTime = (seconds) => {
+    if (!isActive) return;
+    endTimeRef.current += seconds * 1000;
+    setTotalDuration(prev => prev + seconds);
+    setTimeLeft(prev => prev + seconds);
+  };
+
   const cancelTimer = () => {
     setIsActive(false);
     setTimeLeft(0);
@@ -96,23 +103,28 @@ export default function StrengthTimer() {
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
-    return `${m}:${s.toString().padStart(2, '0')}`;
+    return m > 0 ? `${m}:${s.toString().padStart(2, '0')}` : s.toString();
   };
 
+  // Progress for the giant circle
+  const progressPercent = totalDuration > 0 ? ((totalDuration - timeLeft) / totalDuration) * 100 : 0;
+  // Use strokeDasharray="283" for a circle of r="45" (2 * PI * 45 ≈ 282.7)
+  const dashoffset = 283 - (283 * progressPercent) / 100;
+
   return (
-    <div className="flex flex-col items-center justify-between h-full w-full py-8 pb-12 relative">
+    <div className="flex flex-col items-center justify-between min-h-[75vh] h-full w-full py-4 pb-16 relative overflow-hidden">
       
-      {/* Ambient Glow */}
+      {/* Background ambient pulse */}
       <AnimatePresence>
         {isActive && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.2 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.1, 0.3, 0.1] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute inset-0 z-0 pointer-events-none"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(189, 252, 50, 0.12) 0%, transparent 70%)'
+              background: 'radial-gradient(circle at 50% 40%, rgba(189, 252, 50, 0.15) 0%, transparent 60%)'
             }}
           />
         )}
@@ -120,86 +132,123 @@ export default function StrengthTimer() {
 
       <motion.div 
         layoutId="shared-main-panel"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-        className="z-10 flex flex-col items-center justify-between h-full w-full max-w-sm mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="z-10 flex flex-col items-center justify-between flex-1 w-full max-w-sm mx-auto"
       >
         
-        {/* Top: Light Indicators */}
-        <div className="flex gap-4 items-center justify-center pt-8">
-          {Array.from({ length: 6 }).map((_, i) => {
-            const elapsed = totalDuration > 0 ? totalDuration - timeLeft : 0;
-            const threshold = (i / 6) * totalDuration;
-            const isOn = isActive && elapsed >= threshold;
-            
-            return (
-              <div 
-                key={i}
-                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 shrink-0 ${isOn ? 'bg-[#bdfc32]' : 'bg-white/10'}`}
-                style={{
-                  boxShadow: isOn ? '0 0 16px rgba(189,252,50,0.8)' : 'none'
-                }}
+        {/* Giant Circle Timer Area */}
+        <div className="relative flex flex-col items-center justify-center flex-1 w-full max-h-[60vh] aspect-square mt-4">
+          
+          <svg className="absolute w-[85vw] max-w-[360px] h-full transform -rotate-90 pointer-events-none overflow-visible" viewBox="0 0 100 100">
+            {/* Background track */}
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              fill="none"
+              stroke="rgba(255,255,255,0.03)"
+              strokeWidth="2"
+            />
+            {/* Animated active track */}
+            {isActive && (
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="#bdfc32"
+                strokeWidth="4"
+                strokeDasharray="283"
+                strokeDashoffset={dashoffset}
+                strokeLinecap="round"
+                className="transition-all duration-1000 ease-linear"
+                style={{ filter: 'drop-shadow(0 0 12px rgba(189,252,50,0.8))' }}
               />
-            );
-          })}
-        </div>
-        
-        {/* Center: Massive Timer */}
-        <div className="flex flex-col items-center justify-center flex-1 w-full">
-          <motion.div 
-            animate={isActive ? { scale: [1, 1.05, 1] } : { scale: 1 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-[7rem] sm:text-[9rem] font-semibold tracking-tighter tabular-nums leading-none" 
-            style={{ 
-              color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
-              textShadow: isActive ? '0 0 40px rgba(189,252,50,0.5)' : 'none'
-            }}
-          >
-            {formatTime(timeLeft)}
-          </motion.div>
-          <div className={`text-sm uppercase tracking-widest font-bold mt-6 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-500'}`}>
-            {isActive ? 'Descansando' : 'Listo'}
+            )}
+            {/* Inner ambient ring */}
+            <circle
+              cx="50"
+              cy="50"
+              r="38"
+              fill="rgba(255,255,255,0.02)"
+              stroke={isActive ? 'rgba(189,252,50,0.1)' : 'rgba(255,255,255,0.05)'}
+              strokeWidth="1"
+            />
+          </svg>
+
+          {/* Central Time Display */}
+          <div className="flex flex-col items-center justify-center z-10 w-full absolute inset-0">
+            <motion.div 
+              animate={isActive ? { scale: [1, 1.02, 1] } : { scale: 1 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+              className="text-[8rem] sm:text-[10rem] font-bold tracking-tighter tabular-nums leading-none flex items-center justify-center h-40" 
+              style={{ 
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
+                textShadow: isActive ? '0 0 40px rgba(189,252,50,0.4)' : 'none'
+              }}
+            >
+              {formatTime(timeLeft)}
+            </motion.div>
+            
+            <div className={`text-sm uppercase tracking-[0.3em] font-black mt-2 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-600'}`}>
+              {isActive ? 'Recuperación' : 'Selecciona'}
+            </div>
+            
+            {/* Extra active action (Add 30s) inside the circle */}
+            <AnimatePresence>
+              {isActive && (
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  onClick={() => addTime(30)}
+                  className="mt-8 px-5 py-2 rounded-full glass-panel flex items-center gap-2 text-white hover:text-[#bdfc32] hover:bg-white/10 transition-colors text-sm font-bold"
+                >
+                  <Plus size={16} /> 30s
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
         {/* Bottom: Action Buttons */}
-        <div className="flex flex-col items-center justify-center w-full h-[120px] relative pb-6">
+        <div className="flex flex-col items-center justify-end w-full h-[140px] relative mt-auto">
           <AnimatePresence mode="wait">
             {!isActive ? (
               <motion.div 
                 key="start-buttons"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.2 }}
-                className="flex gap-8 absolute inset-0 w-full items-center justify-center"
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex gap-6 absolute inset-0 w-full items-center justify-center pb-4"
               >
                 <button
                   onClick={() => startTimer(60)}
-                  className="glass-btn w-28 h-28 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
+                  className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-gray-300 hover:text-white"
                 >
-                  <span className="text-3xl font-bold">60s</span>
+                  <span className="text-4xl font-bold">60<span className="text-xl text-gray-500">s</span></span>
                 </button>
                 <button
                   onClick={() => startTimer(90)}
-                  className="glass-btn w-28 h-28 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
+                  className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-gray-300 hover:text-white"
                 >
-                  <span className="text-3xl font-bold">90s</span>
+                  <span className="text-4xl font-bold">90<span className="text-xl text-gray-500">s</span></span>
                 </button>
               </motion.div>
             ) : (
               <motion.button
                 key="cancel-button"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.2, type: "spring", bounce: 0.3 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, type: "spring", bounce: 0.4 }}
                 onClick={cancelTimer}
-                className="glass-btn w-24 h-24 flex flex-col items-center justify-center rounded-full text-red-500 bg-red-500/10 hover:bg-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                className="w-24 h-24 flex items-center justify-center rounded-full text-red-500 bg-red-500/10 hover:bg-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.2)] mb-4"
               >
-                <X size={40} />
+                <X size={44} />
               </motion.button>
             )}
           </AnimatePresence>
