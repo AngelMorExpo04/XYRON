@@ -311,7 +311,7 @@ export default function TabataTimer() {
         <div className="relative flex items-center justify-center w-64 h-64">
           
           {/* Progress Ring */}
-          <svg className="absolute w-full h-full transform -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+          <svg className="absolute w-full h-full transform -rotate-90 pointer-events-none overflow-visible" viewBox="0 0 100 100">
             {/* Background track */}
             <circle
               cx="50"
