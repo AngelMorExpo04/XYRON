@@ -100,26 +100,37 @@ export default function StrengthTimer() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-full w-full py-6 pb-10">
+    <div className="flex flex-col items-center justify-between h-full w-full py-8 pb-12 relative">
+      
+      {/* Ambient Glow */}
+      <AnimatePresence>
+        {isActive && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.2 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="absolute inset-0 z-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(189, 252, 50, 0.12) 0%, transparent 70%)'
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       <motion.div 
         layoutId="shared-main-panel"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.2 }}
-        className="glass-panel flex flex-col items-center justify-center py-12 px-6 w-full max-w-sm my-auto overflow-hidden relative"
+        className="z-10 flex flex-col items-center justify-between h-full w-full max-w-sm mx-auto"
       >
-        <motion.div
-           initial={{ opacity: 0, scale: 0.95, y: 15 }}
-           animate={{ opacity: 1, scale: 1, y: 0 }}
-           exit={{ opacity: 0, scale: 0.95, y: -15 }}
-           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-           className="w-full flex flex-col items-center"
-        >
-          {/* Light Indicators */}
-          <div className="flex gap-3 mb-10 items-center justify-center">
-            {Array.from({ length: 6 }).map((_, i) => {
-              const elapsed = totalDuration > 0 ? totalDuration - timeLeft : 0;
+        
+        {/* Top: Light Indicators */}
+        <div className="flex gap-4 items-center justify-center pt-8">
+          {Array.from({ length: 6 }).map((_, i) => {
+            const elapsed = totalDuration > 0 ? totalDuration - timeLeft : 0;
             const threshold = (i / 6) * totalDuration;
             const isOn = isActive && elapsed >= threshold;
             
@@ -128,64 +139,72 @@ export default function StrengthTimer() {
                 key={i}
                 className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 shrink-0 ${isOn ? 'bg-[#bdfc32]' : 'bg-white/10'}`}
                 style={{
-                  boxShadow: isOn ? '0 0 12px rgba(189,252,50,0.6)' : 'none'
+                  boxShadow: isOn ? '0 0 16px rgba(189,252,50,0.8)' : 'none'
                 }}
               />
             );
           })}
         </div>
         
-        {/* Massive LCD Screen Replacement */}
-        <div className="flex flex-col items-center justify-center mb-12 w-full max-w-sm">
-          <div className={`text-[10px] uppercase tracking-widest font-bold mb-2 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-500'}`}>
-            {isActive ? 'Descansando' : 'Listo'}
-          </div>
-          <div className="text-8xl sm:text-9xl font-semibold tracking-tighter" style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.7)' }}>
+        {/* Center: Massive Timer */}
+        <div className="flex flex-col items-center justify-center flex-1 w-full">
+          <motion.div 
+            animate={isActive ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="text-[7rem] sm:text-[9rem] font-semibold tracking-tighter tabular-nums leading-none" 
+            style={{ 
+              color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
+              textShadow: isActive ? '0 0 40px rgba(189,252,50,0.5)' : 'none'
+            }}
+          >
             {formatTime(timeLeft)}
+          </motion.div>
+          <div className={`text-sm uppercase tracking-widest font-bold mt-6 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-500'}`}>
+            {isActive ? 'Descansando' : 'Listo'}
           </div>
         </div>
 
-      {/* Buttons */}
-      <div className="flex flex-col gap-6 w-full max-w-sm h-[80px] justify-center relative mt-4">
-        <AnimatePresence mode="wait">
-          {!isActive ? (
-            <motion.div 
-              key="start-buttons"
-              initial={{ opacity: 0, y: 15, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -15, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="flex gap-6 absolute inset-0 w-full justify-center"
-            >
-              <button
-                onClick={() => startTimer(60)}
-                className="glass-btn w-24 h-24 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
+        {/* Bottom: Action Buttons */}
+        <div className="flex flex-col items-center justify-center w-full h-[120px] relative pb-6">
+          <AnimatePresence mode="wait">
+            {!isActive ? (
+              <motion.div 
+                key="start-buttons"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.2 }}
+                className="flex gap-8 absolute inset-0 w-full items-center justify-center"
               >
-                <span className="text-2xl font-bold">60s</span>
-              </button>
-              <button
-                onClick={() => startTimer(90)}
-                className="glass-btn w-24 h-24 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
+                <button
+                  onClick={() => startTimer(60)}
+                  className="glass-btn w-28 h-28 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
+                >
+                  <span className="text-3xl font-bold">60s</span>
+                </button>
+                <button
+                  onClick={() => startTimer(90)}
+                  className="glass-btn w-28 h-28 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
+                >
+                  <span className="text-3xl font-bold">90s</span>
+                </button>
+              </motion.div>
+            ) : (
+              <motion.button
+                key="cancel-button"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.2, type: "spring", bounce: 0.3 }}
+                onClick={cancelTimer}
+                className="glass-btn w-24 h-24 flex flex-col items-center justify-center rounded-full text-red-500 bg-red-500/10 hover:bg-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
               >
-                <span className="text-2xl font-bold">90s</span>
-              </button>
-            </motion.div>
-          ) : (
-            <motion.button
-              key="cancel-button"
-              initial={{ opacity: 0, y: 15, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -15, scale: 0.95 }}
-              transition={{ duration: 0.2, type: "spring", bounce: 0.3 }}
-              onClick={cancelTimer}
-              className="glass-btn absolute inset-0 w-full h-[72px] flex items-center justify-center gap-3 text-xl rounded-full text-red-500 bg-red-500/10 hover:bg-red-500/20"
-            >
-              <X size={24} /> Cancelar
-            </motion.button>
-          )}
-        </AnimatePresence>
-      </div>
-      </motion.div>
+                <X size={40} />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
+
       </motion.div>
     </div>
   );
