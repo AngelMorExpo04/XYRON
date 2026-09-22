@@ -78,10 +78,11 @@ export default function InteractiveNavBar({ activeTab, setActiveTab }) {
     <nav className="w-full relative z-50 px-4 pb-safe pt-4 mb-4">
       <div 
         ref={containerRef}
-        className="relative flex w-full h-16 rounded-2xl items-center p-1 select-none"
+        className="relative flex w-full h-16 rounded-2xl items-center p-1 select-none border border-white/5"
         style={{
-          background: 'linear-gradient(180deg, #1f2328 0%, #111215 100%)',
-          boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.6), 0 1px 1px rgba(255,255,255,0.1)'
+          background: 'rgba(255, 255, 255, 0.03)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)'
         }}
       >
         {/* Layer 1: Interaction Hitboxes (z-10) */}
@@ -111,11 +112,9 @@ export default function InteractiveNavBar({ activeTab, setActiveTab }) {
           <div 
             className="w-full h-full rounded-xl"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)'
+              background: 'rgba(189, 252, 50, 0.15)',
+              border: '1px solid rgba(189, 252, 50, 0.3)',
+              boxShadow: '0 0 20px rgba(189, 252, 50, 0.1)'
             }}
           />
         </motion.div>
@@ -127,10 +126,10 @@ export default function InteractiveNavBar({ activeTab, setActiveTab }) {
             return (
               <div key={tab.id} className="flex-1 h-full flex flex-col items-center justify-center">
                 <div 
-                  className={`flex flex-col items-center justify-center transition-colors duration-150 ${isHighlighted ? 'text-[#7fff00]' : 'text-[#64748b]'}`}
-                  style={isHighlighted ? { filter: 'drop-shadow(0 0 6px rgba(127,255,0,0.8))' } : {}}
+                  className={`flex flex-col items-center justify-center transition-colors duration-150 ${isHighlighted ? 'text-[#bdfc32]' : 'text-gray-500'}`}
+                  style={isHighlighted ? { filter: 'drop-shadow(0 0 8px rgba(189,252,50,0.6))' } : {}}
                 >
-                  <tab.icon size={22} />
+                  <tab.icon size={22} strokeWidth={isHighlighted ? 2.5 : 2} />
                   <span className="text-[10px] mt-1 font-bold tracking-widest">{tab.label}</span>
                 </div>
               </div>

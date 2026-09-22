@@ -1,20 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-skeuo-base: #b0b5b9;
-  --color-skeuo-text: #222;
-  --color-skeuo-accent: #ff3300;
-  --color-skeuo-screen-bg: #879a83; /* Old LCD Green */
-  --color-skeuo-screen-text: #1a1f18;
-  
-  --font-sans: 'VT323', monospace;
-  --font-mono: 'VT323', monospace;
-  --font-pixel: 'VT323', monospace;
+  --font-sans: 'Outfit', sans-serif;
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 /* Hide scrollbar completely while maintaining scroll functionality */
@@ -29,7 +21,7 @@
 body {
   background-color: #000000;
   color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   margin: 0;
   min-height: 100vh;
 }
