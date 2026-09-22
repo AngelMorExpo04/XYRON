@@ -106,105 +106,82 @@ export default function StrengthTimer() {
     return m > 0 ? `${m}:${s.toString().padStart(2, '0')}` : s.toString();
   };
 
-  // Progress for the giant circle
-  const progressPercent = totalDuration > 0 ? ((totalDuration - timeLeft) / totalDuration) * 100 : 0;
-  // Use strokeDasharray="283" for a circle of r="45" (2 * PI * 45 ≈ 282.7)
-  const dashoffset = 283 - (283 * progressPercent) / 100;
+  // Progress percent from 1 (full) to 0 (empty)
+  const progress = totalDuration > 0 ? timeLeft / totalDuration : 0;
 
   return (
     <div className="flex flex-col items-center justify-between min-h-[75vh] h-full w-full py-4 pb-16 relative overflow-hidden">
       
-      {/* Background ambient pulse */}
+      {/* Background ambient orb that shrinks with time */}
       <AnimatePresence>
         {isActive && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0.1, 0.3, 0.1] }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 z-0 pointer-events-none"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: progress * 1.5 + 0.2 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 1, ease: "linear" }}
+            className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] z-0 pointer-events-none"
             style={{
-              background: 'radial-gradient(circle at 50% 40%, rgba(189, 252, 50, 0.15) 0%, transparent 60%)'
+              background: 'radial-gradient(circle, rgba(189, 252, 50, 0.15) 0%, rgba(189, 252, 50, 0.05) 30%, transparent 70%)'
             }}
           />
         )}
       </AnimatePresence>
+
+      {/* Ultra-thin Laser Progress Bar (Top edge) */}
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-white/5">
+        <motion.div 
+          className="h-full bg-[#bdfc32]"
+          style={{ width: `${progress * 100}%`, filter: 'drop-shadow(0 0 8px #bdfc32)' }}
+          layout
+        />
+      </div>
 
       <motion.div 
         layoutId="shared-main-panel"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="z-10 flex flex-col items-center justify-between flex-1 w-full max-w-sm mx-auto"
+        className="z-10 flex flex-col items-center justify-between flex-1 w-full max-w-sm mx-auto h-full"
       >
         
-        {/* Giant Circle Timer Area */}
-        <div className="relative flex flex-col items-center justify-center flex-1 w-full max-h-[60vh] aspect-square mt-4">
+        {/* Central Typographic Timer */}
+        <div className="relative flex flex-col items-center justify-center flex-1 w-full mt-10">
           
-          <svg className="absolute w-[85vw] max-w-[360px] h-full transform -rotate-90 pointer-events-none overflow-visible" viewBox="0 0 100 100">
-            {/* Background track */}
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              fill="none"
-              stroke="rgba(255,255,255,0.03)"
-              strokeWidth="2"
-            />
-            {/* Animated active track */}
-            {isActive && (
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="#bdfc32"
-                strokeWidth="4"
-                strokeDasharray="283"
-                strokeDashoffset={dashoffset}
-                strokeLinecap="round"
-                className="transition-all duration-1000 ease-linear"
-                style={{ filter: 'drop-shadow(0 0 12px rgba(189,252,50,0.8))' }}
-              />
-            )}
-            {/* Inner ambient ring */}
-            <circle
-              cx="50"
-              cy="50"
-              r="38"
-              fill="rgba(255,255,255,0.02)"
-              stroke={isActive ? 'rgba(189,252,50,0.1)' : 'rgba(255,255,255,0.05)'}
-              strokeWidth="1"
-            />
-          </svg>
+          <div className={`text-sm uppercase tracking-[0.4em] font-black mb-8 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-600'}`}>
+            {isActive ? 'Recuperación' : 'Descanso'}
+          </div>
 
-          {/* Central Time Display */}
-          <div className="flex flex-col items-center justify-center z-10 w-full absolute inset-0">
-            <motion.div 
-              animate={isActive ? { scale: [1, 1.02, 1] } : { scale: 1 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-              className="text-[8rem] sm:text-[10rem] font-bold tracking-tighter tabular-nums leading-none flex items-center justify-center h-40" 
-              style={{ 
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.3)',
-                textShadow: isActive ? '0 0 40px rgba(189,252,50,0.4)' : 'none'
-              }}
-            >
-              {formatTime(timeLeft)}
-            </motion.div>
+          {/* Animated Numbers */}
+          <div className="relative h-40 w-full flex items-center justify-center overflow-hidden">
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                key={timeLeft}
+                initial={{ opacity: 0, y: 50, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -50, filter: 'blur(8px)' }}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                className="absolute text-[9rem] sm:text-[11rem] font-bold tracking-tighter tabular-nums leading-none"
+                style={{ 
+                  color: isActive ? '#fff' : 'rgba(255,255,255,0.2)',
+                  textShadow: isActive ? '0 0 30px rgba(189,252,50,0.3)' : 'none'
+                }}
+              >
+                {formatTime(timeLeft)}
+              </motion.div>
+            </AnimatePresence>
+          </div>
             
-            <div className={`text-sm uppercase tracking-[0.3em] font-black mt-2 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-600'}`}>
-              {isActive ? 'Recuperación' : 'Selecciona'}
-            </div>
-            
-            {/* Extra active action (Add 30s) inside the circle */}
+          {/* Extra active action (Add 30s) */}
+          <div className="h-16 mt-8 flex items-center justify-center">
             <AnimatePresence>
               {isActive && (
                 <motion.button
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
                   onClick={() => addTime(30)}
-                  className="mt-8 px-5 py-2 rounded-full glass-panel flex items-center gap-2 text-white hover:text-[#bdfc32] hover:bg-white/10 transition-colors text-sm font-bold"
+                  className="px-6 py-3 rounded-full border border-white/10 flex items-center gap-2 text-gray-300 hover:text-[#bdfc32] hover:bg-white/5 hover:border-[#bdfc32]/50 transition-all text-sm font-bold backdrop-blur-md"
                 >
                   <Plus size={16} /> 30s
                 </motion.button>
