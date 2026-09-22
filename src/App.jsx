@@ -10,16 +10,16 @@ function App() {
   const [activeTab, setActiveTab] = useState('planner');
 
   return (
-    <div className="flex flex-col h-[100dvh] overflow-hidden text-skeuo-text font-sans selection:bg-skeuo-accent selection:text-white relative">
+    <div 
+      className="flex flex-col h-[100dvh] overflow-hidden text-white font-sans selection:bg-[#bdfc32] selection:text-black relative"
+      style={{
+        background: 'radial-gradient(circle at 50% 40%, rgba(189, 252, 50, 0.08) 0%, #000000 60%)',
+        backgroundColor: '#000000'
+      }}
+    >
       
       {/* Main Content Area */}
-      <main 
-        className="flex-1 overflow-y-auto pt-6 px-4 -mb-6 pb-16 max-w-2xl mx-auto w-full no-scrollbar"
-        style={{
-          maskImage: 'linear-gradient(to bottom, black calc(100% - 56px), transparent calc(100% - 16px))',
-          WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 56px), transparent calc(100% - 16px))'
-        }}
-      >
+      <main className="flex-1 overflow-y-auto pt-6 px-4 -mb-6 pb-16 max-w-2xl mx-auto w-full no-scrollbar">
         <div className="grid items-start w-full min-h-full">
           <AnimatePresence>
             {activeTab === 'planner' && (

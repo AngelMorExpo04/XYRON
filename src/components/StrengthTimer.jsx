@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Timer, X } from 'lucide-react';
+import { Timer, X, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useWakeLock from '../hooks/useWakeLock';
 
@@ -107,7 +107,7 @@ export default function StrengthTimer() {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.2 }}
-        className="skeuo-panel flex flex-col items-center justify-center py-10 px-6 w-full max-w-sm my-auto overflow-hidden relative"
+        className="glass-panel flex flex-col items-center justify-center py-12 px-6 w-full max-w-sm my-auto overflow-hidden relative"
       >
         <motion.div
            initial={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -117,7 +117,7 @@ export default function StrengthTimer() {
            className="w-full flex flex-col items-center"
         >
           {/* Light Indicators */}
-          <div className="flex gap-2.5 mb-8 items-center justify-center">
+          <div className="flex gap-3 mb-10 items-center justify-center">
             {Array.from({ length: 6 }).map((_, i) => {
               const elapsed = totalDuration > 0 ? totalDuration - timeLeft : 0;
             const threshold = (i / 6) * totalDuration;
@@ -126,30 +126,27 @@ export default function StrengthTimer() {
             return (
               <div 
                 key={i}
-                className="w-4 h-4 sm:w-5 sm:h-5 rounded-full transition-all duration-300 shrink-0"
+                className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full transition-all duration-300 shrink-0 ${isOn ? 'bg-[#bdfc32]' : 'bg-white/10'}`}
                 style={{
-                  backgroundColor: isOn ? '#d25c46' : '#cbd5e1',
-                  boxShadow: isOn 
-                    ? 'inset -1.5px -1.5px 3px rgba(0,0,0,0.3), inset 1.5px 1.5px 3px rgba(255,255,255,0.4), 0 0 12px 1px rgba(210, 92, 70, 0.7)' 
-                    : 'inset 2px 2px 4px rgba(0,0,0,0.2), inset -2px -2px 4px rgba(255,255,255,0.8), 0.5px 0.5px 1px rgba(255,255,255,0.5)'
+                  boxShadow: isOn ? '0 0 12px rgba(189,252,50,0.6)' : 'none'
                 }}
               />
             );
           })}
         </div>
         
-        {/* LCD Screen */}
-        <div className="skeuo-screen flex flex-col items-center justify-center mb-10 w-full max-w-sm py-8 px-4">
-          <div className="text-xs uppercase tracking-widest font-bold opacity-60 mb-2">
+        {/* Massive LCD Screen Replacement */}
+        <div className="flex flex-col items-center justify-center mb-12 w-full max-w-sm">
+          <div className={`text-[10px] uppercase tracking-widest font-bold mb-2 transition-colors ${isActive ? 'text-[#bdfc32]' : 'text-gray-500'}`}>
             {isActive ? 'Descansando' : 'Listo'}
           </div>
-          <div className="text-7xl sm:text-8xl font-bold font-mono tracking-tighter" style={{ textShadow: '2px 2px 0 rgba(255,255,255,0.4)' }}>
+          <div className="text-8xl sm:text-9xl font-semibold tracking-tighter" style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.7)' }}>
             {formatTime(timeLeft)}
           </div>
         </div>
 
       {/* Buttons */}
-      <div className="flex flex-col gap-6 w-full max-w-sm h-[72px] justify-center relative">
+      <div className="flex flex-col gap-6 w-full max-w-sm h-[80px] justify-center relative mt-4">
         <AnimatePresence mode="wait">
           {!isActive ? (
             <motion.div 
@@ -158,19 +155,19 @@ export default function StrengthTimer() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -15, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="flex gap-4 absolute inset-0 w-full"
+              className="flex gap-6 absolute inset-0 w-full justify-center"
             >
               <button
                 onClick={() => startTimer(60)}
-                className="skeuo-btn flex-1 py-5 text-xl rounded-xl"
+                className="glass-btn w-24 h-24 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
               >
-                60s
+                <span className="text-2xl font-bold">60s</span>
               </button>
               <button
                 onClick={() => startTimer(90)}
-                className="skeuo-btn flex-1 py-5 text-xl rounded-xl"
+                className="glass-btn w-24 h-24 flex flex-col items-center justify-center rounded-full text-white hover:text-[#bdfc32] hover:bg-white/15"
               >
-                90s
+                <span className="text-2xl font-bold">90s</span>
               </button>
             </motion.div>
           ) : (
@@ -181,7 +178,7 @@ export default function StrengthTimer() {
               exit={{ opacity: 0, y: -15, scale: 0.95 }}
               transition={{ duration: 0.2, type: "spring", bounce: 0.3 }}
               onClick={cancelTimer}
-              className="skeuo-btn-danger absolute inset-0 w-full py-5 flex items-center justify-center gap-3 text-xl rounded-xl"
+              className="glass-btn absolute inset-0 w-full h-[72px] flex items-center justify-center gap-3 text-xl rounded-full text-red-500 bg-red-500/10 hover:bg-red-500/20"
             >
               <X size={24} /> Cancelar
             </motion.button>
