@@ -163,23 +163,23 @@ export default function Planner() {
         <h2 className="text-2xl font-bold mb-4 ml-2 text-white">Estadísticas</h2>
         
         <div className="glass-panel p-5 mx-2 flex flex-col gap-6">
-          <div className="flex gap-4">
-            <div className="flex-1 flex flex-col gap-2">
+          <div className="flex gap-2 sm:gap-4 w-full">
+            <div className="flex-1 flex flex-col gap-2 min-w-0">
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Desde</label>
               <input 
                 type="date" 
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="glass-input text-xs sm:text-sm p-2 w-full uppercase font-mono" 
+                className="glass-input text-[10px] sm:text-sm p-1.5 sm:p-2 w-full uppercase font-mono min-w-0" 
               />
             </div>
-            <div className="flex-1 flex flex-col gap-2">
+            <div className="flex-1 flex flex-col gap-2 min-w-0">
               <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Hasta</label>
               <input 
                 type="date" 
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="glass-input text-xs sm:text-sm p-2 w-full uppercase font-mono" 
+                className="glass-input text-[10px] sm:text-sm p-1.5 sm:p-2 w-full uppercase font-mono min-w-0" 
               />
             </div>
           </div>
