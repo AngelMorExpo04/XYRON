@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { Timer, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import useWakeLock from '../hooks/useWakeLock';
 
 export default function StrengthTimer() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [totalDuration, setTotalDuration] = useState(0);
+
+  useWakeLock(isActive);
   
   const startTimeRef = useRef(null);
   const endTimeRef = useRef(null);
@@ -18,7 +21,7 @@ export default function StrengthTimer() {
     }
   };
 
-  const playBeep = (freq = 440, type = 'sine') => {
+  const playBeep = (freq = 440, type = 'square', vol = 1.0) => {
     if (!audioCtxRef.current) return;
     const oscillator = audioCtxRef.current.createOscillator();
     const gainNode = audioCtxRef.current.createGain();
@@ -26,7 +29,7 @@ export default function StrengthTimer() {
     oscillator.type = type;
     oscillator.frequency.setValueAtTime(freq, audioCtxRef.current.currentTime);
     
-    gainNode.gain.setValueAtTime(0.1, audioCtxRef.current.currentTime);
+    gainNode.gain.setValueAtTime(vol, audioCtxRef.current.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtxRef.current.currentTime + 0.5);
     
     oscillator.connect(gainNode);
@@ -43,7 +46,7 @@ export default function StrengthTimer() {
     const remainingMs = Math.max(0, endTimeRef.current - now);
     
     if (remainingMs <= 0) {
-      playBeep(880, 'square');
+      playBeep(880, 'square', 1.5);
       setTimeLeft(0);
       setIsActive(false);
     } else {
@@ -51,7 +54,7 @@ export default function StrengthTimer() {
         const currentSeconds = Math.ceil(remainingMs / 1000);
         const prevSeconds = Math.ceil((remainingMs + 16) / 1000);
         if (currentSeconds < prevSeconds && currentSeconds > 0) {
-          playBeep(440, 'sine');
+          playBeep(660, 'square', 1.0);
         }
       }
       

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Plus, Minus, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import useWakeLock from '../hooks/useWakeLock';
 
 const WORK_TIME = 45;
 const REST_TIME = 15;
@@ -21,6 +22,7 @@ export default function TabataTimer() {
   
   const [timeLeft, setTimeLeft] = useState(WORK_TIME);
   const [isActive, setIsActive] = useState(false);
+  useWakeLock(isActive);
   const [phase, setPhase] = useState('work'); // 'work' | 'rest' | 'done'
   const [exerciseCount, setExerciseCount] = useState(1);
   const [roundCount, setRoundCount] = useState(1);
@@ -36,7 +38,7 @@ export default function TabataTimer() {
     }
   };
 
-  const playBeep = (freq = 440, type = 'sine') => {
+  const playBeep = (freq = 440, type = 'sine', vol = 1.0) => {
     if (!audioCtxRef.current) return;
     const oscillator = audioCtxRef.current.createOscillator();
     const gainNode = audioCtxRef.current.createGain();
@@ -44,7 +46,7 @@ export default function TabataTimer() {
     oscillator.type = type;
     oscillator.frequency.setValueAtTime(freq, audioCtxRef.current.currentTime);
     
-    gainNode.gain.setValueAtTime(0.1, audioCtxRef.current.currentTime);
+    gainNode.gain.setValueAtTime(vol, audioCtxRef.current.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtxRef.current.currentTime + 0.5);
     
     oscillator.connect(gainNode);
@@ -86,7 +88,7 @@ export default function TabataTimer() {
     let newTimeLeftMs = timeLeftAtPauseRef.current - delta;
 
     if (newTimeLeftMs <= 0) {
-      playBeep(880, 'square');
+      playBeep(880, 'square', 1.5);
       const nextTime = advancePhase();
       if (nextTime > 0) {
         startTimeRef.current = Date.now();
@@ -99,7 +101,7 @@ export default function TabataTimer() {
       const currentSeconds = Math.ceil(newTimeLeftMs / 1000);
       const prevSeconds = Math.ceil((newTimeLeftMs + 16) / 1000);
       if (currentSeconds < prevSeconds && currentSeconds > 0) {
-        playBeep(440, 'sine');
+        playBeep(660, 'square', 1.0);
       }
     }
 

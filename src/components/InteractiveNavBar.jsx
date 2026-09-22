@@ -75,7 +75,7 @@ export default function InteractiveNavBar({ activeTab, setActiveTab }) {
   };
 
   return (
-    <nav className="w-full relative z-50 px-4 pb-safe pt-4 mb-2">
+    <nav className="w-full relative z-50 px-4 pb-safe pt-4 mb-4">
       <div 
         ref={containerRef}
         className="relative flex w-full h-16 rounded-2xl items-center p-1 select-none"
