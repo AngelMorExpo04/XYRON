@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Edit2, Check } from 'lucide-react';
+import { Edit2, Check, CheckSquare, Square } from 'lucide-react';
 
 const PixelDumbbell = ({ color }) => (
   <svg width="28" height="28" viewBox="0 0 16 16" fill={color} style={{ filter: `drop-shadow(0 0 6px ${color})` }}>
@@ -40,8 +40,41 @@ export default function Planner() {
     const saved = localStorage.getItem('neonfit_schedule');
     return saved ? JSON.parse(saved) : defaultSchedule;
   });
+  
+  const getTodayString = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  };
+
+  const startOfCurrentMonth = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
+  };
+
+  const [workoutHistory, setWorkoutHistory] = useState(() => {
+    const saved = localStorage.getItem('neonfit_history');
+    return saved ? JSON.parse(saved) : [];
+  });
+  
+  const [startDate, setStartDate] = useState(startOfCurrentMonth());
+  const [endDate, setEndDate] = useState(getTodayString());
+
   const [editingIndex, setEditingIndex] = useState(null);
   const [editValue, setEditValue] = useState('');
+
+  const todayStr = getTodayString();
+  const isDoneToday = workoutHistory.includes(todayStr);
+
+  const toggleTodayDone = () => {
+    let newHistory;
+    if (isDoneToday) {
+      newHistory = workoutHistory.filter(d => d !== todayStr);
+    } else {
+      newHistory = [...workoutHistory, todayStr];
+    }
+    setWorkoutHistory(newHistory);
+    localStorage.setItem('neonfit_history', JSON.stringify(newHistory));
+  };
 
   const handleEditClick = (idx, currentValue) => {
     setEditingIndex(idx);
@@ -65,6 +98,10 @@ export default function Planner() {
   };
 
   const todayIndex = (new Date().getDay() + 6) % 7;
+
+  const filteredCount = workoutHistory.filter(dateStr => {
+    return dateStr >= startDate && dateStr <= endDate;
+  }).length;
 
   return (
     <div className="flex flex-col gap-6 pb-6">
@@ -135,9 +172,9 @@ export default function Planner() {
                   </button>
                 </div>
               ) : (
-                <div className="flex-1 flex items-center h-full">
+                <div className="flex-1 flex items-center justify-between h-full">
                   <span 
-                    className="text-sm font-bold pl-3 border-l-2 flex-1 py-1 flex items-center cursor-text transition-colors"
+                    className="text-sm font-bold pl-3 border-l-2 py-1 flex items-center cursor-text transition-colors"
                     onClick={() => handleEditClick(idx, item.workout)}
                     style={{ 
                       color: isToday ? neonColor : '#6b7280',
@@ -147,12 +184,63 @@ export default function Planner() {
                   >
                     {item.workout}
                   </span>
+                  
+                  {isToday && (
+                    <button 
+                      onClick={toggleTodayDone}
+                      className="ml-2 skeuo-btn p-2 flex items-center justify-center transition-all duration-300"
+                      style={{ 
+                        color: isDoneToday ? neonColor : '#4b5563',
+                        boxShadow: isDoneToday ? `inset 2px 2px 5px rgba(0,0,0,0.8), 0 0 8px ${shadowColor}` : undefined
+                      }}
+                    >
+                      {isDoneToday ? <CheckSquare size={20} /> : <Square size={20} />}
+                    </button>
+                  )}
                 </div>
               )}
               </div>
             </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Stats Panel */}
+      <div className="w-full mt-4">
+        <h2 className="text-xl font-bold mb-4 ml-2 text-gray-300" style={{ textShadow: '1px 1px 2px #000, -1px -1px 1px rgba(255,255,255,0.1)' }}>Estadísticas</h2>
+        
+        <div className="skeuo-panel p-4 mx-4 sm:mx-6 flex flex-col gap-5">
+          <div className="flex gap-4">
+            <div className="flex-1 flex flex-col gap-2">
+              <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Desde</label>
+              <input 
+                type="date" 
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="skeuo-input text-xs sm:text-sm p-2 w-full text-gray-300 uppercase font-mono" 
+              />
+            </div>
+            <div className="flex-1 flex flex-col gap-2">
+              <label className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Hasta</label>
+              <input 
+                type="date" 
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="skeuo-input text-xs sm:text-sm p-2 w-full text-gray-300 uppercase font-mono" 
+              />
+            </div>
+          </div>
+          
+          <div className="skeuo-screen w-full flex items-center justify-between p-4 px-6 border border-gray-700/50">
+            <div className="flex flex-col">
+              <span className="text-[10px] sm:text-xs uppercase font-bold opacity-60 tracking-widest text-[#7fff00]">Clases</span>
+              <span className="text-sm sm:text-base font-bold text-gray-200 uppercase tracking-widest">Completadas</span>
+            </div>
+            <div className="text-5xl sm:text-6xl font-mono font-bold" style={{ color: '#7fff00', textShadow: '0 0 12px rgba(127,255,0,0.6)' }}>
+              {filteredCount}
+            </div>
+          </div>
         </div>
       </div>
 
