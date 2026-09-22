@@ -59,7 +59,7 @@ export default function Planner() {
   const getWorkoutTheme = (workout) => {
     const text = workout.toLowerCase();
     if (text.includes('entreno') || text.includes('fuerza') || text.includes('abs')) return { color: '#7fff00', Icon: PixelDumbbell };
-    if (text.includes('correr') || text.includes('cardio') || text.includes('piscina')) return { color: '#f97316', Icon: PixelHeart }; // Naranja
+    if (text.includes('correr') || text.includes('cardio') || text.includes('piscina')) return { color: '#facc15', Icon: PixelHeart }; // Amarillo anterior
     if (text.includes('libre') || text.includes('descanso')) return { color: '#ef4444', Icon: PixelBattery }; // Rojo
     return { color: '#9ca3af', Icon: PixelCross };
   };
@@ -82,7 +82,7 @@ export default function Planner() {
             
             // Hex to rgba helper for shadows (rough approximation for the 3 main colors)
             const shadowColor = neonColor === '#7fff00' ? 'rgba(127,255,0,0.4)' : 
-                                neonColor === '#f97316' ? 'rgba(249,115,22,0.4)' : 
+                                neonColor === '#facc15' ? 'rgba(250,204,21,0.4)' : 
                                 neonColor === '#ef4444' ? 'rgba(239,68,68,0.4)' : 'rgba(156,163,175,0.4)';
 
             return (
