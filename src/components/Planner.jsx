@@ -139,7 +139,7 @@ export default function Planner() {
                         {item.workout}
                       </span>
                       
-                      {isToday && (
+                      {isToday && !item.workout.toLowerCase().includes('descanso') && !item.workout.toLowerCase().includes('libre') && (
                         <button 
                           onClick={toggleTodayDone}
                           className={`ml-2 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shrink-0 ${isDoneToday ? 'text-black' : 'bg-white/10 text-white'}`}
