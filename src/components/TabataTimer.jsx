@@ -349,59 +349,59 @@ export default function TabataTimer() {
           
         </div>
 
-        {/* Action Buttons (Apple Watch Style) */}
-        <div className="flex items-center justify-center gap-6 w-full">
+        {/* Action Controls */}
+        <div className="flex flex-col items-center gap-6 w-full mt-2">
           
-          {/* Reset or Rounds (-) */}
-          {isIdle ? (
-            <button 
-              type="button" 
-              onClick={(e) => { e.preventDefault(); updateRounds(-1); }}
-              className="w-16 h-16 rounded-full glass-btn flex items-center justify-center text-white"
-            >
-              <Minus size={24} />
-            </button>
-          ) : (
-            <button 
-              type="button" 
-              onClick={(e) => { e.preventDefault(); resetTimer(); }}
-              className="w-16 h-16 rounded-full glass-btn flex items-center justify-center text-red-500"
-            >
-              <RotateCcw size={22} />
-            </button>
-          )}
-
-          {/* Main Play/Pause Button */}
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); toggleTimer(); }}
-            className={`w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-white/20 text-white backdrop-blur-md' : 'bg-[#bdfc32] text-black shadow-[0_0_20px_rgba(189,252,50,0.4)]'}`}
-          >
-            {isActive 
-              ? <Pause size={32} fill="currentColor" /> 
-              : <Play size={32} fill="currentColor" className="ml-1" />
-            }
-          </button>
-
-          {/* Rounds (+) */}
-          {isIdle ? (
-            <button 
-              type="button" 
-              onClick={(e) => { e.preventDefault(); updateRounds(1); }}
-              className="w-16 h-16 rounded-full glass-btn flex items-center justify-center text-white relative"
-            >
-              <Plus size={24} />
-              <div className="absolute -top-3 -right-3 bg-white/20 px-2 py-0.5 rounded-full text-[10px] font-bold text-[#bdfc32]">
-                {totalRounds} R
-              </div>
-            </button>
-          ) : (
-            <div className="w-16 h-16 flex items-center justify-center flex-col gap-1">
-              <span className="text-xl font-bold text-gray-300 tabular-nums">{roundCount}</span>
-              <span className="text-[9px] uppercase tracking-widest text-gray-500 font-bold">Ronda</span>
+          <div className="flex items-center justify-center gap-6 w-full">
+            {/* Reset Space (Empty if idle, Reset if active) */}
+            <div className="w-16 h-16 flex items-center justify-center">
+              {!isIdle && (
+                <button 
+                  type="button" 
+                  onClick={(e) => { e.preventDefault(); resetTimer(); }}
+                  className="w-16 h-16 rounded-full glass-btn flex items-center justify-center text-red-500"
+                >
+                  <RotateCcw size={22} />
+                </button>
+              )}
             </div>
-          )}
 
+            {/* Main Play/Pause Button */}
+            <button
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleTimer(); }}
+              className={`w-20 h-20 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isActive ? 'bg-white/20 text-white backdrop-blur-md' : 'bg-[#bdfc32] text-black shadow-[0_0_20px_rgba(189,252,50,0.4)]'}`}
+            >
+              {isActive 
+                ? <Pause size={32} fill="currentColor" /> 
+                : <Play size={32} fill="currentColor" className="ml-1" />
+              }
+            </button>
+
+            {/* Spacer for perfect centering */}
+            <div className="w-16 h-16" />
+          </div>
+
+          {/* Rounds Control Below */}
+          <div className="flex items-center justify-center gap-4">
+             {isIdle ? (
+                <>
+                  <button onClick={() => updateRounds(-1)} className="w-12 h-12 shrink-0 rounded-full glass-btn flex items-center justify-center text-white">
+                    <Minus size={20}/>
+                  </button>
+                  <div className="h-12 px-6 rounded-full glass-panel flex items-center justify-center text-[#bdfc32] font-bold text-xl border-none bg-white/10 shrink-0">
+                    {totalRounds} R
+                  </div>
+                  <button onClick={() => updateRounds(1)} className="w-12 h-12 shrink-0 rounded-full glass-btn flex items-center justify-center text-white">
+                    <Plus size={20}/>
+                  </button>
+                </>
+             ) : (
+                <div className="h-12 px-6 rounded-full glass-panel flex items-center justify-center text-[#bdfc32] font-bold text-xl border-none bg-white/10">
+                  {roundCount} / {totalRounds} R
+                </div>
+             )}
+          </div>
         </div>
       </motion.div>
 
