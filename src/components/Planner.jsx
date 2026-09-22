@@ -96,9 +96,11 @@ export default function Planner() {
             return (
             <div key={idx} className="relative flex flex-col w-full group">
               <div 
-                className={`glass-panel p-3 w-full flex flex-row items-center justify-between transition-all duration-300 ${isToday ? 'border-[#bdfc32]/50 bg-white/10' : 'border-transparent'}`}
+                className={`glass-panel p-3 w-full flex flex-row items-center justify-between transition-all duration-300 ${isToday ? 'bg-white/10' : 'border-transparent'}`}
                 style={{ 
-                  boxShadow: isToday ? `0 0 20px rgba(189,252,50,0.15)` : 'none'
+                  borderColor: isToday ? neonColor : 'transparent',
+                  borderWidth: isToday ? '1px' : '1px', // Keep border consistent for layout
+                  boxShadow: isToday ? `0 0 20px ${neonColor}30` : 'none' // Adds 30 hex (approx 20% opacity) to color
                 }}
               >
                 {/* Icon Circle */}
@@ -130,7 +132,7 @@ export default function Planner() {
                   ) : (
                     <div className="flex items-center justify-between w-full">
                       <span 
-                        className={`text-sm font-semibold truncate cursor-text transition-colors w-full ${isToday ? 'text-white' : 'text-gray-400'}`}
+                        className={`text-sm font-semibold cursor-text transition-colors w-full ${isToday ? 'text-white' : 'text-gray-400'}`}
                         onClick={() => handleEditClick(idx, item.workout)}
                         style={isToday ? { textShadow: `0 0 10px ${neonColor}` } : {}}
                       >
