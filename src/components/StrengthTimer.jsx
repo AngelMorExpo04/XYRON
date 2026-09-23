@@ -161,7 +161,7 @@ export default function StrengthTimer() {
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -50, filter: 'blur(8px)' }}
                 transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                className="absolute text-[9rem] sm:text-[11rem] font-bold tracking-tighter tabular-nums leading-none"
+                className="absolute p-12 text-[9rem] sm:text-[11rem] font-bold tracking-tighter tabular-nums leading-none"
                 style={{ 
                   color: isActive ? '#fff' : 'rgba(255,255,255,0.2)',
                   textShadow: isActive ? '0 0 30px rgba(189,252,50,0.3)' : 'none'
