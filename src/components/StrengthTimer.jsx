@@ -181,7 +181,7 @@ export default function StrengthTimer() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   onClick={() => addTime(30)}
-                  className="px-6 py-3 rounded-full border border-white/10 flex items-center gap-2 text-gray-300 hover:text-[#bdfc32] hover:bg-white/5 hover:border-[#bdfc32]/50 transition-all text-sm font-bold backdrop-blur-md"
+                  className="px-6 py-3 rounded-full flex items-center gap-2 text-gray-300 hover:text-[#bdfc32] hover:bg-white/5 transition-all text-sm font-bold backdrop-blur-md"
                 >
                   <Plus size={16} /> 30s
                 </motion.button>
