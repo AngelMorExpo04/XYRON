@@ -203,7 +203,7 @@ export default function TabataTimer() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="glass-panel p-6 w-full flex flex-col items-center text-center justify-center min-h-[200px]"
+              className="glass-panel border-none p-6 w-full flex flex-col items-center text-center justify-center min-h-[200px]"
             >
               <div className="mb-4 pb-4 border-b border-white/10 w-full flex flex-col items-center">
                 <span className="block text-[10px] uppercase font-bold text-gray-500 tracking-widest mb-1">
@@ -253,7 +253,7 @@ export default function TabataTimer() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="glass-panel p-5 flex flex-col gap-4 w-full"
+              className="glass-panel border-none p-5 flex flex-col gap-4 w-full"
             >
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-bold text-sm tracking-wider text-white">Lista de Ejercicios</h3>
