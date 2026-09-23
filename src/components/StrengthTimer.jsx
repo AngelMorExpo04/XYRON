@@ -204,13 +204,13 @@ export default function StrengthTimer() {
               >
                 <button
                   onClick={() => startTimer(60)}
-                  className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-gray-300 hover:text-white"
+                  className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-gray-300 hover:text-white"
                 >
                   <span className="text-4xl font-bold">60<span className="text-xl text-gray-500">s</span></span>
                 </button>
                 <button
                   onClick={() => startTimer(90)}
-                  className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all text-gray-300 hover:text-white"
+                  className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-gray-300 hover:text-white"
                 >
                   <span className="text-4xl font-bold">90<span className="text-xl text-gray-500">s</span></span>
                 </button>
