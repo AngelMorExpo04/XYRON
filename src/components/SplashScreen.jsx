@@ -21,9 +21,9 @@ export default function SplashScreen({ onComplete }) {
         className="absolute inset-0 pointer-events-none flex items-center justify-center"
       >
         <div 
-          className="absolute w-[200vmax] h-[200vmax]"
+          className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle, #bccf0a 0%, #839006 30%, #000100 60%)',
+            background: 'radial-gradient(circle 350px at 50% 50%, #bccf0a 0%, #839006 35%, #000100 100%)',
             opacity: 0.8
           }}
         />
