@@ -9,8 +9,8 @@ export default function SplashScreen({ onComplete }) {
       <motion.div
         key="splash"
         initial={{ opacity: 1 }}
-        exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.1 }}
-        transition={{ duration: 0.8, ease: "easeInOut" }}
+        exit={{ opacity: 0, scale: 1.02 }}
+        transition={{ duration: 0.6, ease: "easeIn" }}
         className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#000100] overflow-hidden"
       >
         {/* Background Gradient (Lights up first) */}
@@ -70,12 +70,13 @@ export default function SplashScreen({ onComplete }) {
           </svg>
         </div>
         
-        {/* Optional text */}
+        {/* Text */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 2.4 }}
-          className="absolute bottom-20 text-[#1d1d1b] text-xl font-bold tracking-[0.5em] uppercase"
+          className="absolute bottom-20 text-[#bdfc32] text-xl font-bold tracking-[0.5em] uppercase"
+          style={{ textShadow: '0 0 15px rgba(189,252,50,0.5)' }}
         >
           Xyron
         </motion.div>
