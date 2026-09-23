@@ -206,13 +206,13 @@ export default function StrengthTimer() {
                   onClick={() => startTimer(60)}
                   className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-gray-300 hover:text-white"
                 >
-                  <span className="text-4xl font-bold">60<span className="text-xl text-gray-500">s</span></span>
+                  <span className="text-4xl font-bold">60<span className="text-xl text-[#bdfc32]">s</span></span>
                 </button>
                 <button
                   onClick={() => startTimer(90)}
                   className="w-28 h-28 flex flex-col items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-all text-gray-300 hover:text-white"
                 >
-                  <span className="text-4xl font-bold">90<span className="text-xl text-gray-500">s</span></span>
+                  <span className="text-4xl font-bold">90<span className="text-xl text-[#bdfc32]">s</span></span>
                 </button>
               </motion.div>
             ) : (
