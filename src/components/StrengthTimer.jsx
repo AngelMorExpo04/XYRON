@@ -110,7 +110,7 @@ export default function StrengthTimer() {
   const progress = totalDuration > 0 ? timeLeft / totalDuration : 0;
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-[75vh] h-full w-full py-4 pb-16 relative overflow-hidden">
+    <div className="flex flex-col items-center justify-between min-h-[75vh] h-full w-full py-4 pb-16 relative">
       
       {/* Background ambient orb that shrinks with time */}
       <AnimatePresence>
