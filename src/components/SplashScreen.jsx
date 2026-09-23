@@ -23,7 +23,7 @@ export default function SplashScreen({ onComplete }) {
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle 350px at 50% 50%, #bccf0a 0%, #839006 35%, #000100 100%)',
+            background: 'radial-gradient(circle closest-side at 50% 50%, #bccf0a 0%, #839006 40%, #000100 100%)',
             opacity: 0.8
           }}
         />
