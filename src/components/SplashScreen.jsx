@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export default function SplashScreen({ onComplete }) {
   const neonColor = '#bdfc32'; // The app's signature neon lime green
-  const logoBlack = '#1d1d1b';
+  const logoBlack = '#000000';
   const glowColor = '#bccf0a'; // The center color of the background gradient
 
   return (
@@ -39,9 +39,10 @@ export default function SplashScreen({ onComplete }) {
           {/* The X Path */}
           <motion.path
             d="M226.4,252.52l-27.66-52.8h39.11l19.28,36.6c10.34,18.16,20.95,44.14,32.41,44.14,27.66,0,22.63,3.35,48.61-44.14l19.28-36.6h39.11l-27.66,52.8c-5.87,10.62-13.97,30.45-27.38,45.26,13.41,14.53,21.51,34.36,27.38,44.98l27.66,52.8h-39.11l-19.28-36.6c-10.34-18.16-20.95-43.86-32.41-43.86-27.66,0-22.63-3.35-48.61,43.86l-19.28,36.6h-39.11l27.66-52.8c5.87-10.62,13.97-30.45,27.38-44.98-13.41-14.81-21.51-34.64-27.38-45.26Z"
-            initial={{ pathLength: 0, fill: "rgba(29,29,27,0)", stroke: "#ffffff", strokeWidth: 4 }}
-            animate={{ pathLength: 1, fill: logoBlack, strokeWidth: 0, stroke: logoBlack }}
+            initial={{ opacity: 0, pathLength: 0, fill: "transparent", stroke: "#ffffff", strokeWidth: 4 }}
+            animate={{ opacity: 1, pathLength: 1, fill: logoBlack, strokeWidth: 0, stroke: logoBlack }}
             transition={{
+              opacity: { duration: 0.01, delay: 0.8 },
               pathLength: { duration: 1.2, delay: 0.8, ease: "easeInOut" },
               fill: { duration: 0.5, delay: 2.0, ease: "easeIn" },
               strokeWidth: { duration: 0.5, delay: 2.0 }
