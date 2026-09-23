@@ -153,7 +153,7 @@ export default function StrengthTimer() {
           </div>
 
           {/* Animated Numbers */}
-          <div className="relative h-40 w-full flex items-center justify-center overflow-hidden">
+          <div className="relative h-40 w-full flex items-center justify-center">
             <AnimatePresence mode="popLayout">
               <motion.div
                 key={timeLeft}
