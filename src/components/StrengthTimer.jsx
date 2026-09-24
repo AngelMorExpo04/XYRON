@@ -46,15 +46,22 @@ export default function StrengthTimer() {
     const remainingMs = Math.max(0, endTimeRef.current - now);
     
     if (remainingMs <= 0) {
+      if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
       playBeep(880, 'square', 1.5);
       setTimeLeft(0);
       setIsActive(false);
     } else {
-      if (remainingMs <= 5000) {
-        const currentSeconds = Math.ceil(remainingMs / 1000);
-        const prevSeconds = Math.ceil((remainingMs + 16) / 1000);
-        if (currentSeconds < prevSeconds && currentSeconds > 0) {
+      const currentSeconds = Math.ceil(remainingMs / 1000);
+      const prevSeconds = Math.ceil((remainingMs + 16) / 1000);
+      
+      if (currentSeconds < prevSeconds && currentSeconds > 0) {
+        if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
+        
+        if (remainingMs <= 5000) {
           playBeep(660, 'square', 1.0);
+        } else {
+          // Play silent beep to keep AudioContext awake on iOS
+          playBeep(440, 'sine', 0.0001);
         }
       }
       
@@ -77,6 +84,8 @@ export default function StrengthTimer() {
     if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
       audioCtxRef.current.resume();
     }
+    // Initial silent beep to lock in the AudioContext on iOS
+    playBeep(440, 'sine', 0.0001);
     
     const now = Date.now();
     startTimeRef.current = now;
