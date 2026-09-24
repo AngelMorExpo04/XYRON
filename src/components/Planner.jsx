@@ -134,7 +134,6 @@ export default function Planner() {
                       <span 
                         className={`text-sm font-semibold cursor-text transition-colors w-full ${isToday ? 'text-white' : 'text-gray-400'}`}
                         onClick={() => handleEditClick(idx, item.workout)}
-                        style={isToday ? { textShadow: `0 0 10px ${neonColor}` } : {}}
                       >
                         {item.workout}
                       </span>
