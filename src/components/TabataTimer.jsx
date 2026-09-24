@@ -205,44 +205,73 @@ export default function TabataTimer() {
               transition={{ duration: 0.2 }}
               className="glass-panel border-none p-6 w-full flex flex-col items-center text-center justify-center min-h-[200px]"
             >
-              <div className="mb-4 pb-4 border-b border-white/10 w-full flex flex-col items-center">
-                <span className="block text-[10px] uppercase font-bold text-gray-500 tracking-widest mb-1">
-                  Actual ({exerciseCount}/{exercises.length})
-                </span>
-                <div className="text-xl sm:text-2xl font-bold h-10 flex justify-center items-center text-[#bdfc32]">
-                  <AnimatePresence mode="popLayout">
-                    <motion.span
-                      key={phase === 'done' ? 'done' : exerciseCount}
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -20, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="block"
-                    >
-                      {phase === 'done' ? '-' : currentExercise}
-                    </motion.span>
-                  </AnimatePresence>
-                </div>
-              </div>
-              <div className="flex flex-col items-center w-full">
-                <span className="block text-[10px] uppercase font-bold text-gray-500 tracking-widest mb-1">
-                  Siguiente
-                </span>
-                <div className="text-base sm:text-lg font-semibold h-6 text-gray-300">
-                  <AnimatePresence mode="popLayout">
-                    <motion.span 
-                      key={phase === 'done' ? 'done' : exerciseCount}
-                      initial={{ y: 15, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: -15, opacity: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 }}
-                      className="block"
-                    >
-                      {phase === 'done' ? '-' : nextExercise}
-                    </motion.span>
-                  </AnimatePresence>
-                </div>
-              </div>
+              <AnimatePresence mode="wait">
+                {phase === 'rest' ? (
+                  <motion.div
+                    key="rest-view"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-col items-center justify-center w-full h-full my-auto py-6"
+                  >
+                    <span className="block text-xs uppercase font-bold text-[#facc15] tracking-widest mb-2 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]">
+                      Prepárate para
+                    </span>
+                    <span className="text-3xl font-bold text-white text-center leading-tight">
+                      {nextExercise}
+                    </span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="work-view"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full flex flex-col items-center"
+                  >
+                    <div className="mb-4 pb-4 border-b border-white/10 w-full flex flex-col items-center">
+                      <span className="block text-[10px] uppercase font-bold text-gray-500 tracking-widest mb-1">
+                        Actual ({exerciseCount}/{exercises.length})
+                      </span>
+                      <div className="text-xl sm:text-2xl font-bold h-10 flex justify-center items-center text-[#bdfc32]">
+                        <AnimatePresence mode="popLayout">
+                          <motion.span
+                            key={phase === 'done' ? 'done' : exerciseCount}
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -20, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="block"
+                          >
+                            {phase === 'done' ? '-' : currentExercise}
+                          </motion.span>
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center w-full">
+                      <span className="block text-[10px] uppercase font-bold text-gray-500 tracking-widest mb-1">
+                        Siguiente
+                      </span>
+                      <div className="text-base sm:text-lg font-semibold h-6 text-gray-300">
+                        <AnimatePresence mode="popLayout">
+                          <motion.span 
+                            key={phase === 'done' ? 'done' : exerciseCount}
+                            initial={{ y: 15, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -15, opacity: 0 }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
+                            className="block"
+                          >
+                            {phase === 'done' ? '-' : nextExercise}
+                          </motion.span>
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ) : (
             /* Editable Exercise List (Minimalist) */
